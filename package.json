@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Ejecutando pruebas...\" && exit 0"
+    "test": "echo \"Ejecutando pruebas...\" && exit 0",
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
