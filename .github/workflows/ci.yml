@@ -100,11 +100,11 @@ jobs:
         with:
           name: build-artifacts
           path: dist/ # Cambia esto a la carpeta correcta
-      
+
       - name: Configure Git
-      run: |
-        git config --global user.name "Danielam11"
-        git config --global user.email "dmeneses@puce.edu.ec"
+        run: |
+          git config --global user.name "Danielam11"
+          git config --global user.email "dmeneses@puce.edu.ec"
 
       - name: Fix permissions
         run: chmod -R +x node_modules/.bin
