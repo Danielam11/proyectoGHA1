@@ -1,34 +1,101 @@
-name: CI/CD Workflow
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main # Se activa cuando hay un push en la rama 'main'
+      - main
   pull_request:
     branches:
-      - main # Se activa al crear una pull request hacia 'main'
+      - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest # Sistema operativo donde se ejecutarán las acciones
-
+  install-dependencies:
+    runs-on: ubuntu-latest
     steps:
-    # Configurar el repositorio
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Instalar dependencias (ejemplo para un proyecto Node.js)
-    - name: Install dependencies
-      run: npm install
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
-    # Ejecutar pruebas (si tienes configuradas en el proyecto)
-    - name: Run tests
-      run: npm test
+      - name: Install dependencies
+        run: npm install
 
-    # Compilar o preparar el proyecto (opcional)
-    - name: Build project
-      run: npm run build
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    # Acción personalizada al realizar un push (puedes agregar más comandos)
-    - name: Echo confirmation
-      run: echo "Changes have been successfully integrated!"
+  run-tests:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: run-tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: build/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: build/
+
+      - name: Deploy to production
+        run: npm run deploy
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
