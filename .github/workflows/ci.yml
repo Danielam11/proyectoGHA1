@@ -104,4 +104,4 @@ jobs:
       - name: Deploy to production
         run: npm run deploy
         env:
-          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
