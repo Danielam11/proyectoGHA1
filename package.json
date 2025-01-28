@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Ejecutando pruebas...\" && exit 0",
-    "build": "vite build"
+    "build": "npx vite build"
   },
   "keywords": [],
   "author": "",
