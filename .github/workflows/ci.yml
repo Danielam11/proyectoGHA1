@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18' # Actualizado a Node.js 18
 
       - name: Cache npm dependencies
         uses: actions/cache@v3
@@ -41,7 +41,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18' # Actualizado a Node.js 18
 
       - name: Install dependencies
         run: npm install
@@ -59,7 +59,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18' # Actualizado a Node.js 18
 
       - name: Install dependencies
         run: npm install
@@ -87,7 +87,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18' # Actualizado a Node.js 18
 
       - name: Install dependencies
         run: npm install
